@@ -30,9 +30,9 @@ import {OK_STATUS_CODE,VALIDATION_ERROR_CODE,MESSAGE_IMAGE_PROCESS_ERROR,MESSAGE
 
   /**************************************************************************** */
 
-  app.get( "/filteredimage", async ( req, res ) => {
+  app.get( "/filteredimage", async ( req: express.Request, res: express.Response ) => {
     // Validate Image URL
-    let {image_url} = req.query;
+    let { image_url } : {image_url:string} = req.query
     if (!image_url) {
       return res.status(VALIDATION_ERROR_CODE).send(MESSAGE_IMAGE_EMPTY);
     } else {
@@ -58,7 +58,7 @@ import {OK_STATUS_CODE,VALIDATION_ERROR_CODE,MESSAGE_IMAGE_PROCESS_ERROR,MESSAGE
   
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
+  app.get( "/", async ( req: express.Request, res: express.Response ) => {
     res.status(OK_STATUS_CODE).send(HOME_MESSAGE)
   } );
   
