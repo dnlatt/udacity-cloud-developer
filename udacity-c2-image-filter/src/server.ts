@@ -1,4 +1,5 @@
 import express from 'express';
+import { Request, Response } from "express";
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 import {OK_STATUS_CODE,VALIDATION_ERROR_CODE,MESSAGE_IMAGE_PROCESS_ERROR,MESSAGE_IMAGE_EMPTY, HOME_MESSAGE} from './helpers/constants';
@@ -30,9 +31,9 @@ import {OK_STATUS_CODE,VALIDATION_ERROR_CODE,MESSAGE_IMAGE_PROCESS_ERROR,MESSAGE
 
   /**************************************************************************** */
 
-  app.get( "/filteredimage", async ( req: express.Request, res: express.Response ) => {
+  app.get( "/filteredimage", async ( req: Request, res: Response ) => {
     // Validate Image URL
-    let { image_url } : {image_url:string} = req.query
+    let { image_url } : {image_url:string} = req.query;
     if (!image_url) {
       return res.status(VALIDATION_ERROR_CODE).send(MESSAGE_IMAGE_EMPTY);
     } else {
@@ -58,7 +59,7 @@ import {OK_STATUS_CODE,VALIDATION_ERROR_CODE,MESSAGE_IMAGE_PROCESS_ERROR,MESSAGE
   
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req: express.Request, res: express.Response ) => {
+  app.get( "/", async ( req: Request, res: Response ) => {
     res.status(OK_STATUS_CODE).send(HOME_MESSAGE)
   } );
   
