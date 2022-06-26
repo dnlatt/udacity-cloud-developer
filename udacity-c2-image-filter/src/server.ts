@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import {OK_STATUS_CODE,VALIDATION_ERROR_CODE,MESSAGE_IMAGE_PROCESS_ERROR,MESSAGE_IMAGE_EMPTY, HOME_MESSAGE} from './helpers/constants';
 
 (async () => {
 
@@ -29,12 +30,36 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   /**************************************************************************** */
 
+  app.get( "/filteredimage", async ( req, res ) => {
+    // Validate Image URL
+    let {image_url} = req.query;
+    if (!image_url) {
+      return res.status(VALIDATION_ERROR_CODE).send(MESSAGE_IMAGE_EMPTY);
+    } else {
+
+      // Try to filter image processing
+
+      try {
+        // Send the result image
+        const filterImage = await filterImageFromURL(image_url.toString());
+        res.status(OK_STATUS_CODE).sendFile(filterImage);
+
+        // Delete files
+        res.on('finish', () => deleteLocalFiles([filterImage]));
+      } catch(err) {
+        //Send error
+        return res.status(VALIDATION_ERROR_CODE).send(MESSAGE_IMAGE_PROCESS_ERROR + err)
+      }
+    }
+  } );
+
+
   //! END @TODO1
   
   // Root Endpoint
   // Displays a simple message to the user
   app.get( "/", async ( req, res ) => {
-    res.send("try GET /filteredimage?image_url={{}}")
+    res.status(OK_STATUS_CODE).send(HOME_MESSAGE)
   } );
   
 
